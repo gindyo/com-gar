@@ -2,7 +2,7 @@ body { font: 0.8em/165% "Lucida Grande","Lucida Sans Unicode",Segoe UI,Helvetica
 
 h1, h2, h3, h4, h5, h6 { margin:25px 0 20px 0; line-height:120%; text-shadow: 1px 1px 1px #EAF1EA; font-family: Myriad Pro,"Lucida Grande","Lucida Sans Unicode",Segoe UI,Helvetica,Arial,sans-serif; }
 
-h1 { font-size: 20px; margin:0 0 20px 0; }
+h1 { font-size: 32px; margin:0 0 20px 0; }
 
 h2 { font-size: 20px; color:#1487d4; font-weight:normal; }
 
@@ -46,9 +46,8 @@ blockquote { background:transparent url('images/blockquote.png') no-repeat top l
 
 .region-content { line-height:155%; } 
 
-#site-name {color:#fff; font-size:300%; }
+#site-name { font-size:130%; }
 
-#slogan { margin-left:-8px; font-size:300%; }
 /* 
 * Layout 
 */
@@ -197,7 +196,7 @@ text-align:center; text-transform:uppercase; font-family: Myriad Pro,"Lucida Gra
 
 #header-menu ul.menu li.last a { padding-right:0; }
 
-#header-menu ul.menu li a:hover, #header-menu ul.menu li a.active { background:#1b1b1b; color:#ff0000; }
+#header-menu ul.menu li a:hover, #header-menu ul.menu li a.active { color:#1487d4; }
 
 #header-menu ul.menu li a:after { content: none; }
 
@@ -205,7 +204,7 @@ text-align:center; text-transform:uppercase; font-family: Myriad Pro,"Lucida Gra
 
 #header-menu ul.menu li.expanded a { background:transparent url('images/menu-expanded.png') no-repeat center right; padding:10px 15px 10px 10px; }
 
-/* 2nd Level 1487d4 */
+/* 2nd Level */
 #header-menu ul.menu li.expanded ul.menu { width: 230px; z-index:100; padding:0; display: none; position: absolute; }
 
 #header-menu ul.menu li.expanded:hover, #header-menu ul.menu li.expanded:hover > ul.menu { display:block; }
@@ -254,8 +253,6 @@ text-transform:uppercase; font-family: Myriad Pro,"Lucida Grande","Lucida Sans U
 /* 
 * Footer menu 
 */
-#footer .block {height:100px; position:absolute; bottom:0;}
-
 #footer .block ul.menu { margin: 0; padding: 0; }
 
 #footer .block ul.menu ul.menu { margin: 0 0 0 15px; }
@@ -387,8 +384,6 @@ div.messages.status a, div.messages.error a, div.messages.warning a { color:#fff
 #slider { position:relative; margin:0 auto; padding:0;}
 
 #slideshow { position:relative; display:none; }
-
-#slideshow-block { background-color: #1487d4; color:#ffffff; }
 
 #slideshow img { display:none; }
 

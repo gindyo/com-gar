@@ -281,7 +281,7 @@
     <!-- #credits -->   
     <div id="credits" class="container_12 clearfix">
         <div class="grid_12">
-        <p>Site design by Ben Brotsker & Dimitar Ginev</p>
+        <p>Ported to Drupal by <a href="http://www.drupalizing.com">Drupalizing</a>, a Project of <a href="http://www.morethanthemes.com">More than (just) Themes</a>. Designed by <a href="http://www.kaolti.com/">Zsolt Kacso</a></p>
         </div>
     </div>
     <!-- EOF: #credits -->
