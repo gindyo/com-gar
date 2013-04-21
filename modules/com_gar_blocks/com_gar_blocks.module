@@ -10,72 +10,74 @@
   $blocks['user_forum_posts'] = array(
     'info' => 'User Forum Posts',
     'cache' => DRUPAL_NO_CACHE,
-    'status' => TRUE,
     
   );
- 
-    return $blocks;
-  }
-function profile_block_info() {
-  $blocks = array();
-  $blocks['user_prof'] = array(
-    'info' => 'User Prof',
-    'cache' => DRUPAL_NO_CACHE,
-    'status' => TRUE,
-    
-  );
- 
+  $blocks['user_profile'] = array(
+    'info' => 'User Profile',
+    'cache' => DRUPAL_NO_CACHE, // default
+  ); 
+   
+  $blocks['users_list'] = array(
+    'info' => 'Users List',
+    'cache' => DRUPAL_NO_CACHE, // default
+  ); 
     return $blocks;
   }
 // /**
 //  * Implements hook_block_view().
 //  */
-// function com_gar_blocks_block_view($name) {
-//   if ($name == 'user_forum_posts') {
-//     $block = array(
-//       'subject' => t('User\'s Forum Posts'),
-//       'content' => user_forum_posts_content()
-//     );
-//   }
-//   if ($name == 'user_profile') {
-//     $block = array(
-//       'subject' => t('User\'s Profile'),
-//       'content' => user_profile_content()
-//     );
-//   }
-//   return $block;
+function com_gar_blocks_block_view($name) {
+  if ($name == 'user_forum_posts') {
+    $block = array(
+      'subject' => t('User\'s Forum Posts'),
+      'content' => user_forum_posts_content()
+    );
+  }
+  if ($name == 'user_profile') {
+    $block = array(
+      'subject' => t('User\'s Profile'),
+      'content' => user_profile_content()
+    );
+  }
+
+ 
+  return $block;
   
-// }
+}
 
-// function user_forum_posts_content(){
-//   $content = false;
-//   $name = '';
-//   if(isset($_GET['name'])){
-//     $name = $_GET['name'];
-//     $content = '
-//       <h1> ' . $name . ' is ool </h1>
-//     ';
-//   }
-//   return $content;
-// }
+function user_forum_posts_content(){
+  $content = false;
+  $name = '';
+  if(isset($_GET['name']) || preg_match('/user\/[0-9]+/', $_GET['q']) == 1){
+    $uid = substr($_GET["q"], 5);
+    
+    $results = db_query("select * from node where uid =".$uid." and type = 'forum'");
+    var_dump($results);
 
-// function user_profile_content(){
-//   $content = false;
-//   $name = '';
-//   if($_GET['q'] == 'node/19'){
-//     $name = $_GET['name'];
-//     $content = '
-//      <h2>'.$name.'\'s Profile </h2> 
-// <p><strong>I provide bids through Architects and Engineers, work directly with home owners and offer design build services for residential projects.&nbsp; I welcome your inquiries on new construction or renovation projects involving:</strong><br />
-// <strong>Office Buildings&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Churches&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Industrial Warehouses&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Shopping Centers&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Restaurants&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Schools</strong><br />
-// <strong>Residential Additions&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Garages</strong><strong>&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Apartments&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Kitchens&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Bathrooms</strong><br />
-// <strong>Carpentry&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Cabinets&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Windows&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Tile&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Flooring&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Counter Tops&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Lighting</strong><br />
-// <strong>Exterior Repairs &amp; Upgrades&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Siding&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Decks &amp; Porches&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Roofing&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Concrete</strong><strong>&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Brick</strong><br />
-// <strong>S</strong><strong>tructural Repairs&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Underpinning&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Waterproofing&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Retaining Walls</strong><strong>&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Grading&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Drain Ti</strong><strong>le</strong></p>
+    foreach ($results as $key => $value) {
+        $content = $content . '
+      <a href="/?q=node/'.$value->{'nid'}.'">' .$value->{'title'}.'</a> in <a href="?q=forum/6">Home Improvement Forum / Carpentry </a><br>';
+    }
+  }
+  return $content;
+}
 
-// <p><strong>Free estimate are provided to property owners.&nbsp; Estimates for residential work related to insurance claims or the purchase, sale or settlement of property are provided for a reasonable fee.</strong></p>
+function user_profile_content(){
+  $content = false;
+  $name = '';
+  if(preg_match('/user\/.*/', $_GET['q']) == 1 ){
+    $content = '
+     
+<p><strong>I provide bids through Architects and Engineers, work directly with home owners and offer design build services for residential projects.&nbsp; I welcome your inquiries on new construction or renovation projects involving:</strong><br />
+<strong>Office Buildings&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Churches&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Industrial Warehouses&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Shopping Centers&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Restaurants&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Schools</strong><br />
+<strong>Residential Additions&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Garages</strong><strong>&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Apartments&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Kitchens&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Bathrooms</strong><br />
+<strong>Carpentry&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Cabinets&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Windows&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Tile&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Flooring&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Counter Tops&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Lighting</strong><br />
+<strong>Exterior Repairs &amp; Upgrades&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Siding&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Decks &amp; Porches&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Roofing&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Concrete</strong><strong>&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Brick</strong><br />
+<strong>S</strong><strong>tructural Repairs&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Underpinning&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Waterproofing&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Retaining Walls</strong><strong>&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Grading&nbsp;</strong><span class="style3">•</span>&nbsp;<strong>Drain Ti</strong><strong>le</strong></p>
 
-//     ';
-//   }
-//   return $content;
-// }
+<p><strong>Free estimate are provided to property owners.&nbsp; Estimates for residential work related to insurance claims or the purchase, sale or settlement of property are provided for a reasonable fee.</strong></p>
+
+    ';
+  }
+  return $content;
+}
