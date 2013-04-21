@@ -21,6 +21,11 @@
     'info' => 'Users List',
     'cache' => DRUPAL_NO_CACHE, // default
   ); 
+    
+  $blocks['contractor_search'] = array(
+    'info' => 'Contractor Search',
+    'cache' => DRUPAL_NO_CACHE, // default
+  ); 
     return $blocks;
   }
 // /**
@@ -39,6 +44,12 @@ function com_gar_blocks_block_view($name) {
       'content' => user_profile_content()
     );
   }
+  if ($name == 'contractor_search') {
+    $block = array(
+      'subject' => t('User\'s Profile'),
+      'content' => contractor_search_content(),
+    );
+  }
 
  
   return $block;
@@ -50,13 +61,19 @@ function user_forum_posts_content(){
   $name = '';
   if(isset($_GET['name']) || preg_match('/user\/[0-9]+/', $_GET['q']) == 1){
     $uid = substr($_GET["q"], 5);
+    $results = db_query("
+      select n.nid, n.title, t.name  from node n 
+      join forum f on n.nid = f.nid
+      join taxonomy_term_data t on t.tid = f.tid
+      where uid =".$uid." and type = 'forum'
+
+
+      ");
     
-    $results = db_query("select * from node where uid =".$uid." and type = 'forum'");
-    var_dump($results);
 
     foreach ($results as $key => $value) {
         $content = $content . '
-      <a href="/?q=node/'.$value->{'nid'}.'">' .$value->{'title'}.'</a> in <a href="?q=forum/6">Home Improvement Forum / Carpentry </a><br>';
+      <a href="/?q=node/'.$value->{'nid'}.'">' .$value->{'title'}.'</a> in <a href="?q=forum/'.$value->{'nid'}.'">'.$value->{'name'}.'</a><br>';
     }
   }
   return $content;
@@ -65,7 +82,7 @@ function user_forum_posts_content(){
 function user_profile_content(){
   $content = false;
   $name = '';
-  if(preg_match('/user\/.*/', $_GET['q']) == 1 ){
+  if(preg_match('/user\/[0-9]+/', $_GET['q']) == 1 ){
     $content = '
      
 <p><strong>I provide bids through Architects and Engineers, work directly with home owners and offer design build services for residential projects.&nbsp; I welcome your inquiries on new construction or renovation projects involving:</strong><br />
@@ -80,4 +97,37 @@ function user_profile_content(){
     ';
   }
   return $content;
+}
+
+function contractor_search_content(){
+  $content = false;
+  $result = db_query('
+    SELECT distinct c.uid, u.name FROM comgar.comment c
+    join comgar.users u on c.uid = u.uid
+    ');
+  if(preg_match('/node\/16/', $_GET['q']) == 1 ){
+    $content = '
+    <p><label>Search for contractor using keyword </label> <input id="keyword" placeholder="Keyword" type="text" /><button id="form-submit">Search</button></p>
+    <script type="text/javascript">
+      jQuery("#form-submit").click(function(){
+        jQuery("#search-results").show()
+        jQuery(".tag").text(jQuery("#keyword").val())
+      })
+    </script>
+    <div id="search-results" style="display: none">';
+
+    foreach ($result as $key => $value) {
+      $stars = 4 - ($key % 2);
+      $content = $content. '<div><a href="/?q=user/'.$value->{'uid'}.'">'.$value->{'name'}.'</a> <img alt="" src="sites/default/files/imgs/'.$stars.'stars.png" /><br />
+      Specializes in:
+      <ul>
+        <li class="tag">&nbsp;</li>
+        <li>General construction</li>
+      </ul>
+      </div>';
+    }
+    $content = $content.'</div>';
+  }
+
+return $content;
 }
