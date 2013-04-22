@@ -46,7 +46,7 @@ function com_gar_blocks_block_view($name) {
   }
   if ($name == 'contractor_search') {
     $block = array(
-      'subject' => t('User\'s Profile'),
+      'subject' => t(''),
       'content' => contractor_search_content(),
     );
   }
@@ -62,7 +62,7 @@ function user_forum_posts_content(){
   if(isset($_GET['name']) || preg_match('/user\/[0-9]+/', $_GET['q']) == 1){
     $uid = substr($_GET["q"], 5);
     $results = db_query("
-      select n.nid, n.title, t.name  from node n 
+      select n.nid, n.title, t.name, t.tid  from node n 
       join forum f on n.nid = f.nid
       join taxonomy_term_data t on t.tid = f.tid
       where uid =".$uid." and type = 'forum'
@@ -73,7 +73,7 @@ function user_forum_posts_content(){
 
     foreach ($results as $key => $value) {
         $content = $content . '
-      <a href="/?q=node/'.$value->{'nid'}.'">' .$value->{'title'}.'</a> in <a href="?q=forum/'.$value->{'nid'}.'">'.$value->{'name'}.'</a><br>';
+      <a href="/?q=node/'.$value->{'nid'}.'">' .$value->{'title'}.'</a> in <a href="?q=forum/'.$value->{'tid'}.'">'.$value->{'name'}.'</a><br>';
     }
   }
   return $content;
