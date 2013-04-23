@@ -60,12 +60,12 @@ function user_forum_posts_content(){
   $content = false;
   $name = '';
   if(isset($_GET['name']) || preg_match('/user\/[0-9]+/', $_GET['q']) == 1){
-    $uid = substr($_GET["q"], 5);
+    preg_match("/[0-9]+/", $_GET['q'], $uid);
     $results = db_query("
       select n.nid, n.title, t.name, t.tid  from node n 
       join forum f on n.nid = f.nid
       join taxonomy_term_data t on t.tid = f.tid
-      where uid =".$uid." and type = 'forum'
+      where uid =".$uid[0]." and type = 'forum'
 
 
       ");

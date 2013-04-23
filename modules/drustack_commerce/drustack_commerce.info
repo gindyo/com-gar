@@ -1,0 +1,16 @@
+name = DruStack Commerce
+description = DruStack Commerce management
+core = 7.x
+package = DruStack
+version = 7.x-1.0-unstable1
+project = drustack_commerce
+dependencies[] = drustack_core
+features[features_api][] = api:1
+project path = sites/all/modules/drustack
+
+; Information added by drupal.org packaging script on 2013-03-28
+version = "7.x-1.0-unstable1"
+core = "7.x"
+project = "drustack_commerce"
+datestamp = "1364462713"
+
