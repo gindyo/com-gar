@@ -102,8 +102,8 @@ function user_profile_content(){
 function contractor_search_content(){
   $content = false;
   $result = db_query('
-    SELECT distinct c.uid, u.name FROM comgar.comment c
-    join comgar.users u on c.uid = u.uid
+    SELECT distinct c.uid, u.name FROM comment c
+    join users u on c.uid = u.uid
     ');
   if(preg_match('/node\/16/', $_GET['q']) == 1 ){
     $content = '
